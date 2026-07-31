@@ -417,6 +417,6 @@ const inconclusive = warnings.length;
 const verified = selectedTools.length - inconclusive;
 const iconFallbacks = catalog.tools.filter((tool) => !tool.brandIconPath).length;
 const colorFallbacks = catalog.tools.filter((tool) => !tool.brandThemeColor).length;
-console.log(`Brand sync: selected=${selectedTools.length} verified=${verified} changed=${changedToolIds.size} skipped=${skipped} inconclusive=${inconclusive} icon-fallbacks=${iconFallbacks} color-fallbacks=${colorFallbacks}${options.dryRun ? ' dry-run=true' : ''}.`);
+console.log(`Brand sync: selected=${selectedTools.length} verified=${verified} changed=${changedToolIds.size} skipped=${skipped} inconclusive=${inconclusive} icon-repairs=${pendingIcons.length} icon-fallbacks=${iconFallbacks} color-fallbacks=${colorFallbacks}${options.dryRun ? ' dry-run=true' : ''}.`);
 
-if (shouldFailBrandCheck(options, { changed: changedToolIds.size, inconclusive })) process.exitCode = 1;
+if (shouldFailBrandCheck(options, { changed: changedToolIds.size, inconclusive, pendingIconRepairs: pendingIcons.length })) process.exitCode = 1;

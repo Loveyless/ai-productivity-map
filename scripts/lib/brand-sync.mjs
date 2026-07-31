@@ -47,8 +47,8 @@ export function parseSyncArguments(argumentsList) {
   return options;
 }
 
-export function shouldFailBrandCheck(options, { changed, inconclusive }) {
-  return options.check === true && (changed > 0 || inconclusive > 0);
+export function shouldFailBrandCheck(options, { changed, inconclusive, pendingIconRepairs = 0 }) {
+  return options.check === true && (changed > 0 || inconclusive > 0 || pendingIconRepairs > 0);
 }
 
 export function shouldFetchBrandIcon(tool, { refresh, localValid }) {

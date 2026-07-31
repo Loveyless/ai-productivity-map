@@ -28,6 +28,7 @@ describe('brand sync CLI selection', () => {
   it('fails strict check mode on either proposed changes or inconclusive warnings', () => {
     expect(shouldFailBrandCheck({ check: true }, { changed: 0, inconclusive: 1 })).toBe(true);
     expect(shouldFailBrandCheck({ check: true }, { changed: 1, inconclusive: 0 })).toBe(true);
+    expect(shouldFailBrandCheck({ check: true }, { changed: 0, inconclusive: 0, pendingIconRepairs: 1 })).toBe(true);
     expect(shouldFailBrandCheck({ check: true }, { changed: 0, inconclusive: 0 })).toBe(false);
     expect(shouldFailBrandCheck({ check: false }, { changed: 1, inconclusive: 1 })).toBe(false);
   });
