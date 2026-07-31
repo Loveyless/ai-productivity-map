@@ -1,0 +1,56 @@
+name: 报告错误或过时信息
+description: 报告目录中的错误、失效链接或重要变化
+title: "[信息更正] "
+labels: ["catalog", "correction"]
+body:
+  - type: input
+    id: tool
+    attributes:
+      label: 工具名称
+    validations:
+      required: true
+  - type: dropdown
+    id: issue-type
+    attributes:
+      label: 问题类型
+      options:
+        - 官方链接失效或错误
+        - 功能描述不准确
+        - 访问方式或平台已变化
+        - 开源或本地运行标记错误
+        - 其他重要信息过时
+    validations:
+      required: true
+  - type: textarea
+    id: current
+    attributes:
+      label: 当前哪里不对？
+      description: 请指出具体卡片字段或原文。
+    validations:
+      required: true
+  - type: textarea
+    id: correction
+    attributes:
+      label: 建议如何修正？
+    validations:
+      required: true
+  - type: input
+    id: official-source
+    attributes:
+      label: 官方依据
+      description: 提供能核实修正内容的官方 HTTPS 页面。
+      placeholder: https://example.com/docs
+    validations:
+      required: true
+  - type: input
+    id: checked-at
+    attributes:
+      label: 核查日期
+      placeholder: YYYY-MM-DD
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: 补充说明
+      description: 地区、账号类型或访问条件等可能影响复现的信息。

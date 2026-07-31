@@ -1,0 +1,73 @@
+name: 建议收录工具
+description: 提议一个有明确生产力场景的 AI 工具
+title: "[工具建议] "
+labels: ["catalog"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        请提供可核查的官方来源。收录不按热度或数量决定。
+  - type: input
+    id: name
+    attributes:
+      label: 工具名称
+      placeholder: 例如：产品的官方名称
+    validations:
+      required: true
+  - type: input
+    id: official-url
+    attributes:
+      label: 官方链接
+      description: 只接受产品所有者维护的 HTTPS 页面。
+      placeholder: https://example.com/
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: 建议类别
+      options:
+        - 对话与搜索
+        - 写作与文档
+        - 编程与开发
+        - 图像与设计
+        - 视频
+        - 音频与音乐
+        - 演示与办公
+        - 研究与知识
+        - 自动化与智能体
+        - 模型 API
+        - 本地与开源
+    validations:
+      required: true
+  - type: textarea
+    id: task
+    attributes:
+      label: 最适合解决什么任务？
+      description: 请描述具体场景，而不是通用营销口号。
+      placeholder: 当……时，用它来……
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 访问方式与官方依据
+      description: 请附上平台、订阅/免费入口、开源或本地能力的官方页面。
+    validations:
+      required: true
+  - type: textarea
+    id: distinction
+    attributes:
+      label: 为什么值得加入这份精简目录？
+      description: 说明与现有条目的差异或不可替代的任务价值。
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: 提交确认
+      options:
+        - label: 我没有填写未经核实的排名、用户量、价格、免费额度或可用性保证。
+          required: true
+        - label: 我提供的是官方链接，而非下载站、转售或联盟链接。
+          required: true

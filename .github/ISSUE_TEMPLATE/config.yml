@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 查看贡献指南
+    url: https://github.com/Loveyless/ai-productivity-map/blob/main/CONTRIBUTING.md
+    about: 提交前了解收录标准、验证命令和内容边界。

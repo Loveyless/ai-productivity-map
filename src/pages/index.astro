@@ -1,0 +1,298 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { categories, reviewedAt, tools, type CategoryId } from '../data/catalog';
+
+const title = 'AI 生产力地图 | 按任务发现实用 AI 工具';
+const description = '一份中文优先、按实际任务整理的 AI 生产力工具目录。包含官方链接、适用场景、访问方式和审核日期。';
+const base = import.meta.env.BASE_URL;
+const github = 'https://github.com/Loveyless/ai-productivity-map';
+const issueChooser = `${github}/issues/new/choose`;
+const categoryById = new Map(categories.map((category) => [category.id, category]));
+
+function markFor(name: string): string {
+  const words = name.replace(/[^\p{L}\p{N} ]/gu, '').split(/\s+/).filter(Boolean);
+  if (words.length > 1) {
+    return words.slice(0, 2).map((word) => word[0]).join('').toUpperCase();
+  }
+  return words[0]?.slice(0, 2).toUpperCase() ?? 'AI';
+}
+---
+
+<Layout title={title} description={description}>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href={base} aria-label="AI 生产力地图首页">
+        <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="brand-copy">
+          <strong>AI 生产力地图</strong>
+          <small>AI Productivity Map</small>
+        </span>
+      </a>
+      <nav aria-label="主要导航">
+        <a href="#directory">工具目录</a>
+        <a href="#methodology">收录原则</a>
+        <a href={github} target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow">AI PRODUCTIVITY MAP · CURATED DIRECTORY</p>
+          <h1 id="page-title">AI 生产力地图</h1>
+          <p class="hero-statement">从要完成的事出发，找到真正合适的工具。</p>
+          <p class="hero-detail">不做数量竞赛。这里整理具体用途、访问边界与复核日期，帮助你更快做出判断。</p>
+
+          <form class="search-form" id="catalog-search" role="search">
+            <label for="search-input">你现在想完成什么？</label>
+            <div class="search-row">
+              <span class="search-symbol" aria-hidden="true"></span>
+              <input
+                id="search-input"
+                name="query"
+                type="search"
+                placeholder="搜索任务，如：读论文、写代码、做演示"
+                autocomplete="off"
+                aria-controls="tool-grid"
+              />
+              <button class="clear-search" id="clear-search" type="button" hidden>清空</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="route-map" aria-hidden="true">
+          <span class="route route-a"></span>
+          <span class="route route-b"></span>
+          <span class="route route-c"></span>
+          <span class="map-node node-start"><b>问</b><small>任务</small></span>
+          <span class="map-node node-write"><b>写</b><small>内容</small></span>
+          <span class="map-node node-study"><b>研</b><small>资料</small></span>
+          <span class="map-node node-build"><b>做</b><small>交付</small></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="directory" id="directory" aria-labelledby="directory-title">
+      <div class="section-inner">
+        <div class="directory-intro">
+          <div>
+            <p class="section-kicker">STARTER CATALOG · REVIEWED {reviewedAt}</p>
+            <h2 id="directory-title">按任务类型浏览</h2>
+          </div>
+          <p class="result-count" id="result-count" aria-live="polite"><strong>{tools.length}</strong> 个工具</p>
+        </div>
+
+        <div class="filter-wrap">
+          <div class="filter-chips" role="group" aria-label="按类别筛选">
+            <button class="filter-chip is-active" type="button" data-category="all" aria-pressed="true">全部</button>
+            {categories.map((category) => (
+              <button
+                class="filter-chip"
+                type="button"
+                data-category={category.id}
+                aria-pressed="false"
+                title={category.description}
+              >
+                {category.label}
+              </button>
+            ))}
+          </div>
+          <button class="reset-filters" id="reset-filters" type="button" hidden>
+            重置筛选
+          </button>
+        </div>
+
+        <noscript><p class="noscript-note">筛选需要启用 JavaScript；下方完整目录仍可浏览。</p></noscript>
+
+        <div class="tool-grid" id="tool-grid">
+          {tools.map((tool) => {
+            const category = categoryById.get(tool.category as CategoryId);
+            return (
+              <article class="tool-card" data-tool-id={tool.id} data-tone={tool.category}>
+                <header class="tool-header">
+                  <span class="tool-mark" aria-hidden="true">{markFor(tool.name)}</span>
+                  <div class="tool-title-wrap">
+                    <h3>{tool.name}</h3>
+                    <span class="category-label">{category?.label}</span>
+                  </div>
+                  {(tool.openSource || tool.local) && (
+                    <div class="status-flags" aria-label="工具属性">
+                      {tool.openSource && <span>开源</span>}
+                      {tool.local && <span>可本地</span>}
+                    </div>
+                  )}
+                </header>
+
+                <p class="tool-summary">{tool.summary}</p>
+                <p class="best-for"><span>适合</span>{tool.bestFor}</p>
+
+                <ul class="tag-list" aria-label={`${tool.name} 标签`}>
+                  {tool.tags.map((tag) => <li>{tag}</li>)}
+                </ul>
+
+                <dl class="tool-meta">
+                  <div>
+                    <dt>访问</dt>
+                    <dd>{tool.access}</dd>
+                  </div>
+                  <div>
+                    <dt>平台</dt>
+                    <dd>{tool.platforms.join(' · ')}</dd>
+                  </div>
+                </dl>
+
+                <footer class="tool-footer">
+                  <span>复核于 <time datetime={tool.reviewedAt}>{tool.reviewedAt}</time></span>
+                  <a
+                    href={tool.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`访问 ${tool.name} 官方网站（新窗口）`}
+                  >
+                    访问官网 <span aria-hidden="true">↗</span>
+                  </a>
+                </footer>
+              </article>
+            );
+          })}
+        </div>
+
+        <div class="empty-state" id="empty-state" hidden>
+          <span class="empty-mark" aria-hidden="true">?</span>
+          <h3>暂时没有匹配项</h3>
+          <p>换一个更短的任务词，或者清除类别限制。</p>
+          <button type="button" id="empty-reset">查看全部工具</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="methodology" id="methodology" aria-labelledby="methodology-title">
+      <div class="section-inner methodology-layout">
+        <div class="methodology-heading">
+          <p class="section-kicker">HOW WE CURATE</p>
+          <h2 id="methodology-title">一份目录，先说明边界</h2>
+          <p>收录代表它在某类实际任务中值得被看见，不代表排名、背书或适合所有人。</p>
+        </div>
+        <ol class="principle-list">
+          <li>
+            <span>01</span>
+            <div><h3>任务价值</h3><p>能对应清晰的生产力场景，描述能力时避免榜单话术和无法核查的强结论。</p></div>
+          </li>
+          <li>
+            <span>02</span>
+            <div><h3>官方入口</h3><p>优先链接产品官网或官方控制台，不提供第三方下载、转售或联盟链接。</p></div>
+          </li>
+          <li>
+            <span>03</span>
+            <div><h3>复核日期</h3><p>每张卡片标记最近人工复核日期；它不是持续可用性的保证。</p></div>
+          </li>
+          <li>
+            <span>04</span>
+            <div><h3>变化提示</h3><p>价格、免费入口、地区限制、功能与许可可能变化，最终信息请以官网为准。</p></div>
+          </li>
+          <li>
+            <span>05</span>
+            <div><h3>公开纠错</h3><p>错误、失效链接与重要遗漏通过 GitHub Issue 处理，并请附上可核查来源。</p></div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="contribute" aria-labelledby="contribute-title">
+      <div class="section-inner contribute-inner">
+        <div>
+          <p class="section-kicker">OPEN CATALOG · COMMUNITY REVIEW</p>
+          <h2 id="contribute-title">发现好工具，或发现一条过时信息？</h2>
+          <p>用公开 Issue 提交工具、官方来源和更正依据。每一次修改都留在版本历史里。</p>
+        </div>
+        <a class="contribute-link" href={issueChooser} target="_blank" rel="noreferrer">
+          前往 GitHub Issues <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p><strong>AI 生产力地图</strong><span>Chinese-first, task-oriented, openly maintained.</span></p>
+      <p>目录信息仅作发现与初步比较，请在采用工具前核查官网条款。</p>
+    </div>
+  </footer>
+
+  <script>
+    import { tools } from '../data/catalog';
+    import { filterTools } from '../lib/catalog';
+
+    const form = document.querySelector<HTMLFormElement>('#catalog-search');
+    const input = document.querySelector<HTMLInputElement>('#search-input');
+    const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-tool-id]'));
+    const categoryButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-category]'));
+    const count = document.querySelector<HTMLElement>('#result-count');
+    const resetButton = document.querySelector<HTMLButtonElement>('#reset-filters');
+    const clearButton = document.querySelector<HTMLButtonElement>('#clear-search');
+    const emptyState = document.querySelector<HTMLElement>('#empty-state');
+    const emptyReset = document.querySelector<HTMLButtonElement>('#empty-reset');
+
+    let activeCategory = 'all';
+
+    function applyFilters() {
+      if (!input || !count || !resetButton || !clearButton || !emptyState) return;
+
+      const results = filterTools(tools, { query: input.value, category: activeCategory });
+      const visibleIds = new Set(results.map((tool) => tool.id));
+
+      cards.forEach((card) => {
+        card.hidden = !visibleIds.has(card.dataset.toolId ?? '');
+      });
+
+      count.innerHTML = `<strong>${results.length}</strong> 个工具`;
+      emptyState.hidden = results.length !== 0;
+      clearButton.hidden = input.value.length === 0;
+      resetButton.hidden = input.value.trim().length === 0 && activeCategory === 'all';
+    }
+
+    function chooseCategory(button: HTMLButtonElement) {
+      activeCategory = button.dataset.category ?? 'all';
+      categoryButtons.forEach((candidate) => {
+        const selected = candidate === button;
+        candidate.classList.toggle('is-active', selected);
+        candidate.setAttribute('aria-pressed', String(selected));
+      });
+      applyFilters();
+    }
+
+    function resetFilters(focusSearch = false) {
+      if (!input) return;
+      input.value = '';
+      chooseCategory(categoryButtons[0]);
+      if (focusSearch) input.focus();
+    }
+
+    form?.addEventListener('submit', (event) => event.preventDefault());
+    input?.addEventListener('input', applyFilters);
+    clearButton?.addEventListener('click', () => {
+      if (!input) return;
+      input.value = '';
+      applyFilters();
+      input.focus();
+    });
+    resetButton?.addEventListener('click', () => resetFilters(true));
+    emptyReset?.addEventListener('click', () => resetFilters(true));
+
+    categoryButtons.forEach((button, index) => {
+      button.addEventListener('click', () => chooseCategory(button));
+      button.addEventListener('keydown', (event) => {
+        let target = index;
+        if (event.key === 'ArrowRight') target = (index + 1) % categoryButtons.length;
+        else if (event.key === 'ArrowLeft') target = (index - 1 + categoryButtons.length) % categoryButtons.length;
+        else if (event.key === 'Home') target = 0;
+        else if (event.key === 'End') target = categoryButtons.length - 1;
+        else return;
+        event.preventDefault();
+        categoryButtons[target].focus();
+      });
+    });
+  </script>
+</Layout>

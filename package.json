@@ -1,0 +1,28 @@
+{
+  "name": "ai-productivity-map",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A curated Chinese-first directory of useful AI productivity tools.",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check": "astro check",
+    "validate:catalog": "node scripts/validate-catalog.mjs",
+    "validate:links": "node scripts/validate-catalog.mjs --check-links"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "astro": "^7.1.6"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.10"
+  }
+}
