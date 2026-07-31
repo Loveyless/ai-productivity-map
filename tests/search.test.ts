@@ -31,10 +31,14 @@ describe('catalog filtering', () => {
   });
 
   it('combines text search and category filters', () => {
-    const coding = filterTools(tools, { query: '', category: 'coding-development' });
+    const coding = filterTools(tools, { query: '代码', category: 'coding-development' });
     expect(coding.length).toBeGreaterThan(0);
     expect(coding.every((tool) => tool.category === 'coding-development')).toBe(true);
-    expect(filterTools(tools, { query: '代码', category: 'image-design' })).toEqual([]);
+
+    const imageCode = filterTools(tools, { query: '代码', category: 'image-design' });
+    expect(imageCode.map((tool) => tool.id)).toContain('google-stitch');
+    expect(imageCode.every((tool) => tool.category === 'image-design')).toBe(true);
+    expect(imageCode.every((tool) => JSON.stringify(tool).includes('代码'))).toBe(true);
   });
 
   it('returns an empty result for an unknown category instead of broadening the query', () => {

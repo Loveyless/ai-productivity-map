@@ -2,15 +2,21 @@ import { readFile } from 'node:fs/promises';
 import { describe, expect, it } from 'vitest';
 import {
   dateInTimeZone,
+  iconSourceForVerifiedBytes,
+  manualIconLocalEvidenceWarning,
+  manualIconSourceNeedsFetch,
   parseSyncArguments,
   selectToolsForSync,
   shouldFailBrandCheck,
+  shouldFetchBrandIcon,
 } from '../scripts/lib/brand-sync.mjs';
 
 const tools = [
   { id: 'missing', brandIconPath: null },
   { id: 'present', brandIconPath: '/icons/present.png' },
   { id: 'lost', brandIconPath: '/icons/lost.png' },
+  { id: 'manual-missing', brandIconPath: null, brandIconMode: 'manual' },
+  { id: 'manual-lost', brandIconPath: '/icons/manual-lost.png', brandIconMode: 'manual' },
 ];
 type ToolStub = (typeof tools)[number];
 
@@ -44,10 +50,32 @@ describe('brand sync CLI selection', () => {
     expect(source).toContain('assertCatalogUnchanged');
   });
 
-  it('processes only missing or lost local icons by default', () => {
+  it('processes missing automatic icons and reports invalid manual icons', () => {
     const options = parseSyncArguments([]);
     const selected = selectToolsForSync(tools, options, (tool: ToolStub) => tool.id === 'present');
-    expect(selected.map((tool: ToolStub) => tool.id)).toEqual(['missing', 'lost']);
+    expect(selected.map((tool: ToolStub) => tool.id)).toEqual(['missing', 'lost', 'manual-lost']);
+  });
+
+  it('never auto-refreshes manual icons, but reports invalid local evidence and verifies distinct sources', () => {
+    expect(shouldFetchBrandIcon({ brandIconMode: 'manual', brandIconPath: null }, { refresh: true, localValid: false })).toBe(false);
+    expect(shouldFetchBrandIcon({ brandIconPath: '/icons/auto.png' }, { refresh: true, localValid: true })).toBe(true);
+    expect(shouldFetchBrandIcon({ brandIconPath: null }, { refresh: false, localValid: false })).toBe(true);
+
+    expect(manualIconLocalEvidenceWarning({ brandIconMode: 'manual', brandIconPath: '/icons/manual.png' }, false))
+      .toMatch(/missing or invalid/);
+    expect(manualIconLocalEvidenceWarning({ brandIconMode: 'manual', brandIconPath: null }, false)).toBeNull();
+    expect(manualIconLocalEvidenceWarning({ brandIconPath: '/icons/auto.png' }, false)).toBeNull();
+
+    const page = 'https://product.example/tool';
+    expect(manualIconSourceNeedsFetch({ brandIconMode: 'manual', brandIconPath: '/icons/manual.png', brandIconSourceUrl: page }, page)).toBe(false);
+    expect(manualIconSourceNeedsFetch({ brandIconMode: 'manual', brandIconPath: '/icons/manual.png', brandIconSourceUrl: 'https://cdn.product.example/icon.png' }, page)).toBe(true);
+    expect(manualIconSourceNeedsFetch({ brandIconMode: 'manual', brandIconPath: null, brandIconSourceUrl: null }, page)).toBe(false);
+
+    const current = { brandIconSha256: 'a'.repeat(64), brandIconSourceUrl: 'https://product.example/stable.png' };
+    expect(iconSourceForVerifiedBytes(current, true, 'https://product.example/deploy-2.png'))
+      .toBe('https://product.example/stable.png');
+    expect(iconSourceForVerifiedBytes(current, false, 'https://product.example/new.png'))
+      .toBe('https://product.example/new.png');
   });
 
   it('supports all, refresh, repeated ID, dry-run, and check modes', () => {

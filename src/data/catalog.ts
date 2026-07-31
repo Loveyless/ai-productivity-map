@@ -34,7 +34,9 @@ export interface Tool {
   reviewedAt: string;
   /** Stable local PNG path generated from official product metadata. */
   brandIconPath?: string | null;
-  /** Exact official icon URL used to generate brandIconPath. */
+  /** Manual means automated metadata refresh must preserve this reviewed icon or intentional fallback. */
+  brandIconMode?: 'manual';
+  /** Official HTTPS image URL, or the evidence page for a manually imported icon. */
   brandIconSourceUrl?: string | null;
   /** SHA-256 of the exact local PNG bytes. */
   brandIconSha256?: string | null;
@@ -154,6 +156,7 @@ export function validateCatalog(
     }
 
     const iconPath = candidate.brandIconPath;
+    const iconMode = candidate.brandIconMode;
     const iconSource = candidate.brandIconSourceUrl;
     const iconSha256 = candidate.brandIconSha256;
     const iconReviewedAt = candidate.brandIconReviewedAt;
@@ -169,6 +172,9 @@ export function validateCatalog(
 
     if (iconPath !== undefined && iconPath !== null && !hasIcon) {
       errors.push(`tool[${index}].brandIconPath must be an ID-bound local PNG path or null`);
+    }
+    if (iconMode !== undefined && iconMode !== 'manual') {
+      errors.push(`tool[${index}].brandIconMode must be "manual" when present`);
     }
     if (iconSource !== undefined && iconSource !== null && !isHttpsUrl(iconSource)) {
       errors.push(`tool[${index}].brandIconSourceUrl must be an HTTPS URL or null`);

@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-07-31",
+  "reviewedAt": "2026-08-01",
   "categories": [
     {
       "id": "chat-search",
@@ -295,7 +295,8 @@
       "brandIconReviewedAt": "2026-07-31",
       "brandThemeColor": "#1E2327",
       "brandThemeColorSourceUrl": "https://github.com/features/copilot",
-      "brandThemeColorReviewedAt": "2026-07-31"
+      "brandThemeColorReviewedAt": "2026-07-31",
+      "brandIconMode": "manual"
     },
     {
       "id": "cursor",
@@ -355,6 +356,177 @@
       "brandThemeColor": "#1A1B1B",
       "brandThemeColorSourceUrl": "https://replit.com/",
       "brandThemeColorReviewedAt": "2026-07-31"
+    },
+    {
+      "id": "v0",
+      "name": "v0",
+      "summary": "Vercel 的 AI Web 应用构建平台，可通过对话生成、修改并扩展全栈项目。",
+      "bestFor": "从需求描述快速搭建可运行的 Web 产品原型",
+      "category": "coding-development",
+      "tags": [
+        "全栈开发",
+        "UI",
+        "原型",
+        "Vercel"
+      ],
+      "url": "https://v0.app/",
+      "access": "需要账号；使用额度与部署方案以官网为准",
+      "platforms": [
+        "Web"
+      ],
+      "openSource": false,
+      "local": false,
+      "reviewedAt": "2026-08-01",
+      "brandIconPath": "/icons/v0-c21bda56fa04.png",
+      "brandIconSourceUrl": "https://v0.app/assets/apple-icon.png",
+      "brandIconSha256": "c21bda56fa04d112ebe7a2630c4ee266f325dab71bc0e742d4d750876b1c74d6",
+      "brandIconReviewedAt": "2026-08-01",
+      "brandThemeColor": null,
+      "brandThemeColorSourceUrl": null,
+      "brandThemeColorReviewedAt": null
+    },
+    {
+      "id": "lovable",
+      "name": "Lovable",
+      "summary": "面向网站和应用的对话式构建平台，可从自然语言需求生成并迭代产品。",
+      "bestFor": "在较少手写代码的情况下验证 SaaS、内部工具或营销站想法",
+      "category": "coding-development",
+      "tags": [
+        "应用构建",
+        "网站",
+        "原型",
+        "全栈开发"
+      ],
+      "url": "https://lovable.dev/",
+      "access": "需要账号；使用额度与发布方案以官网为准",
+      "platforms": [
+        "Web"
+      ],
+      "openSource": false,
+      "local": false,
+      "reviewedAt": "2026-08-01",
+      "brandIconPath": "/icons/lovable-f68e8f99ce3f.png",
+      "brandIconSourceUrl": "https://lovable.dev/apple-touch-icon.png",
+      "brandIconSha256": "f68e8f99ce3fc3660279c8ddf542e6b22d192978d1dcec8ef1f205387582d815",
+      "brandIconReviewedAt": "2026-08-01",
+      "brandThemeColor": "#FCFBF8",
+      "brandThemeColorSourceUrl": "https://lovable.dev/",
+      "brandThemeColorReviewedAt": "2026-08-01"
+    },
+    {
+      "id": "bolt-new",
+      "name": "Bolt.new",
+      "summary": "浏览器中的 AI 应用构建环境，可根据文字要求创建、运行和修改网站及 Web 应用。",
+      "bestFor": "无需预先配置本地环境就开始制作可运行的前端或全栈原型",
+      "category": "coding-development",
+      "tags": [
+        "应用构建",
+        "浏览器开发",
+        "原型",
+        "Web"
+      ],
+      "url": "https://bolt.new/",
+      "access": "需要账号；使用额度与托管能力以官网为准",
+      "platforms": [
+        "Web"
+      ],
+      "openSource": false,
+      "local": false,
+      "reviewedAt": "2026-08-01",
+      "brandIconPath": "/icons/bolt-new-468bc26ff2f0.png",
+      "brandIconSourceUrl": "https://bolt.new/static/apple-touch-icon.png",
+      "brandIconSha256": "468bc26ff2f0d53e8b3e7e1b29b3995fe9b0b358d60b8309e3b362b8c12d4a77",
+      "brandIconReviewedAt": "2026-08-01",
+      "brandThemeColor": "#111114",
+      "brandThemeColorSourceUrl": "https://bolt.new/",
+      "brandThemeColorReviewedAt": "2026-08-01"
+    },
+    {
+      "id": "figma-make",
+      "name": "Figma Make",
+      "summary": "Figma 的 AI 原型工具，可把提示和设计上下文转为可交互、代码驱动的体验。",
+      "bestFor": "在 Figma 工作流中把界面构想推进到可测试的功能原型",
+      "category": "coding-development",
+      "tags": [
+        "Figma",
+        "交互原型",
+        "UI",
+        "代码生成"
+      ],
+      "url": "https://www.figma.com/make/",
+      "access": "需要 Figma 账号；可用方案与权限以官网为准",
+      "platforms": [
+        "Web"
+      ],
+      "openSource": false,
+      "local": false,
+      "reviewedAt": "2026-08-01",
+      "brandIconPath": null,
+      "brandIconSourceUrl": null,
+      "brandIconSha256": null,
+      "brandIconReviewedAt": null,
+      "brandThemeColor": "#FFFFFF",
+      "brandThemeColorSourceUrl": "https://www.figma.com/make/",
+      "brandThemeColorReviewedAt": "2026-08-01"
+    },
+    {
+      "id": "openai-codex",
+      "name": "OpenAI Codex",
+      "summary": "OpenAI 的智能体编程平台，可在云端、CLI 或开发环境中处理代码任务和仓库工作。",
+      "bestFor": "并行委派实现、修复、测试和代码审查等较长编程任务",
+      "category": "coding-development",
+      "tags": [
+        "编程智能体",
+        "代码仓库",
+        "CLI",
+        "代码审查"
+      ],
+      "url": "https://openai.com/codex/",
+      "access": "需要 OpenAI 账号；可用端与方案以官网为准",
+      "platforms": [
+        "Web",
+        "CLI",
+        "IDE",
+        "桌面端"
+      ],
+      "openSource": false,
+      "local": false,
+      "reviewedAt": "2026-08-01",
+      "brandIconPath": null,
+      "brandIconSourceUrl": null,
+      "brandIconSha256": null,
+      "brandIconReviewedAt": null,
+      "brandThemeColor": null,
+      "brandThemeColorSourceUrl": null,
+      "brandThemeColorReviewedAt": null
+    },
+    {
+      "id": "google-jules",
+      "name": "Google Jules",
+      "summary": "Google 的异步编程智能体，可读取项目上下文、执行开发任务并提交代码变更。",
+      "bestFor": "把代码仓库中的问题、测试或功能任务交给独立智能体处理",
+      "category": "coding-development",
+      "tags": [
+        "编程智能体",
+        "代码仓库",
+        "PR",
+        "Google"
+      ],
+      "url": "https://jules.google.com/",
+      "access": "需要 Google 账号；支持的仓库与方案以官网为准",
+      "platforms": [
+        "Web"
+      ],
+      "openSource": false,
+      "local": false,
+      "reviewedAt": "2026-08-01",
+      "brandIconPath": null,
+      "brandIconSourceUrl": null,
+      "brandIconSha256": null,
+      "brandIconReviewedAt": null,
+      "brandThemeColor": null,
+      "brandThemeColorSourceUrl": null,
+      "brandThemeColorReviewedAt": null
     },
     {
       "id": "adobe-firefly",
@@ -444,6 +616,90 @@
       "brandThemeColorReviewedAt": null
     },
     {
+      "id": "google-stitch",
+      "name": "Google Stitch",
+      "summary": "Google Labs 的 AI 界面设计工具，可从文字或图像生成 Web 与移动端 UI，并继续迭代原型。",
+      "bestFor": "把产品想法或草图快速转成可讨论的界面方案与前端起点",
+      "category": "image-design",
+      "tags": [
+        "UI 设计",
+        "原型",
+        "前端代码",
+        "Google Labs"
+      ],
+      "url": "https://stitch.withgoogle.com/",
+      "access": "Google Labs 实验；账号、语言与地区可用性以官网为准",
+      "platforms": [
+        "Web"
+      ],
+      "openSource": false,
+      "local": false,
+      "reviewedAt": "2026-08-01",
+      "brandIconPath": null,
+      "brandIconSourceUrl": null,
+      "brandIconSha256": null,
+      "brandIconReviewedAt": null,
+      "brandThemeColor": "#151515",
+      "brandThemeColorSourceUrl": "https://stitch.withgoogle.com/_/Nemo/manifest.json",
+      "brandThemeColorReviewedAt": "2026-08-01"
+    },
+    {
+      "id": "recraft",
+      "name": "Recraft",
+      "summary": "面向设计工作的 AI 图像平台，覆盖图片、矢量图、风格控制、编辑和设计素材。",
+      "bestFor": "制作需要统一视觉语言的品牌图、图标、海报和矢量素材",
+      "category": "image-design",
+      "tags": [
+        "图像生成",
+        "矢量图",
+        "品牌设计",
+        "编辑"
+      ],
+      "url": "https://www.recraft.ai/",
+      "access": "需要账号；生成额度与商用条款以官网为准",
+      "platforms": [
+        "Web"
+      ],
+      "openSource": false,
+      "local": false,
+      "reviewedAt": "2026-08-01",
+      "brandIconPath": null,
+      "brandIconSourceUrl": null,
+      "brandIconSha256": null,
+      "brandIconReviewedAt": null,
+      "brandThemeColor": null,
+      "brandThemeColorSourceUrl": null,
+      "brandThemeColorReviewedAt": null
+    },
+    {
+      "id": "ideogram",
+      "name": "Ideogram",
+      "summary": "AI 图像生成与编辑平台，适合包含文字、排版和图形布局的视觉创作。",
+      "bestFor": "生成海报、封面、社交图片及需要清晰文字的设计稿",
+      "category": "image-design",
+      "tags": [
+        "图像生成",
+        "文字渲染",
+        "排版",
+        "设计"
+      ],
+      "url": "https://ideogram.ai/",
+      "access": "需要账号；生成额度与使用条款以官网为准",
+      "platforms": [
+        "Web"
+      ],
+      "openSource": false,
+      "local": false,
+      "reviewedAt": "2026-08-01",
+      "brandIconPath": null,
+      "brandIconSourceUrl": null,
+      "brandIconSha256": null,
+      "brandIconReviewedAt": null,
+      "brandThemeColor": null,
+      "brandThemeColorSourceUrl": null,
+      "brandThemeColorReviewedAt": null
+    },
+    {
       "id": "runway",
       "name": "Runway",
       "summary": "面向创作者的视频生成与编辑平台，提供多种生成式媒体工具。",
@@ -498,6 +754,63 @@
       "brandIconSourceUrl": "https://static-cdn.descript.com/web/icons/apple-touch-icon.png",
       "brandIconSha256": "b5f79b05742c1f1d4799b66eff4c816ee7d2b7f428dc1ddfb2b32d184211cfcf",
       "brandIconReviewedAt": "2026-07-31",
+      "brandThemeColor": null,
+      "brandThemeColorSourceUrl": null,
+      "brandThemeColorReviewedAt": null
+    },
+    {
+      "id": "google-flow",
+      "name": "Google Flow",
+      "summary": "Google 的 AI 创意工作室，可用生成模型制作、延展和编辑视频及配套视觉素材。",
+      "bestFor": "围绕分镜、角色和镜头连续迭代 AI 视频创意",
+      "category": "video",
+      "tags": [
+        "视频生成",
+        "视频编辑",
+        "Veo",
+        "Google"
+      ],
+      "url": "https://labs.google/fx/tools/flow",
+      "access": "需要 Google 账号；模型、额度与地区可用性以官网为准",
+      "platforms": [
+        "Web"
+      ],
+      "openSource": false,
+      "local": false,
+      "reviewedAt": "2026-08-01",
+      "brandIconPath": null,
+      "brandIconSourceUrl": null,
+      "brandIconSha256": null,
+      "brandIconReviewedAt": null,
+      "brandThemeColor": "#FFFFFF",
+      "brandThemeColorSourceUrl": "https://labs.google/fx/icons/favicon/manifest.webmanifest",
+      "brandThemeColorReviewedAt": "2026-08-01",
+      "brandIconMode": "manual"
+    },
+    {
+      "id": "heygen",
+      "name": "HeyGen",
+      "summary": "AI 视频制作平台，可从文字、图像或音频生成带旁白、字幕和数字人的视频。",
+      "bestFor": "制作讲解、培训、本地化和数字人出镜内容",
+      "category": "video",
+      "tags": [
+        "数字人",
+        "视频生成",
+        "配音",
+        "本地化"
+      ],
+      "url": "https://www.heygen.com/",
+      "access": "需要账号；生成额度与数字人权限以官网为准",
+      "platforms": [
+        "Web"
+      ],
+      "openSource": false,
+      "local": false,
+      "reviewedAt": "2026-08-01",
+      "brandIconPath": "/icons/heygen-647cc3420aa4.png",
+      "brandIconSourceUrl": "https://www.heygen.com/favicon.ico",
+      "brandIconSha256": "647cc3420aa4d5d967fc1483ed8e73ce27042c7cd333e5c38b0c1cf9b26b1f55",
+      "brandIconReviewedAt": "2026-08-01",
       "brandThemeColor": null,
       "brandThemeColorSourceUrl": null,
       "brandThemeColorReviewedAt": null
@@ -561,6 +874,34 @@
       "brandThemeColorReviewedAt": "2026-07-31"
     },
     {
+      "id": "udio",
+      "name": "Udio",
+      "summary": "AI 音乐创作平台，可根据文字描述生成歌曲并继续调整风格、段落和声音。",
+      "bestFor": "从音乐想法快速制作歌曲草稿和不同编曲方向",
+      "category": "audio-music",
+      "tags": [
+        "音乐生成",
+        "歌曲",
+        "风格控制",
+        "声音"
+      ],
+      "url": "https://www.udio.com/",
+      "access": "需要账号；生成额度、下载和使用条款以官网为准",
+      "platforms": [
+        "Web"
+      ],
+      "openSource": false,
+      "local": false,
+      "reviewedAt": "2026-08-01",
+      "brandIconPath": null,
+      "brandIconSourceUrl": null,
+      "brandIconSha256": null,
+      "brandIconReviewedAt": null,
+      "brandThemeColor": null,
+      "brandThemeColorSourceUrl": null,
+      "brandThemeColorReviewedAt": null
+    },
+    {
       "id": "microsoft-365-copilot",
       "name": "Microsoft 365 Copilot",
       "summary": "集成于 Microsoft 365 应用的 AI 助手，覆盖文档、表格、演示和会议。",
@@ -588,7 +929,8 @@
       "brandIconReviewedAt": "2026-07-31",
       "brandThemeColor": null,
       "brandThemeColorSourceUrl": null,
-      "brandThemeColorReviewedAt": null
+      "brandThemeColorReviewedAt": null,
+      "brandIconMode": "manual"
     },
     {
       "id": "gamma",
@@ -617,6 +959,34 @@
       "brandThemeColor": null,
       "brandThemeColorSourceUrl": null,
       "brandThemeColorReviewedAt": null
+    },
+    {
+      "id": "napkin-ai",
+      "name": "Napkin AI",
+      "summary": "将文字内容转换为可编辑图示、流程图和演示视觉的 AI 工具。",
+      "bestFor": "把报告、提纲或业务逻辑快速变成易读的图解和演示素材",
+      "category": "presentations-office",
+      "tags": [
+        "图示",
+        "流程图",
+        "演示",
+        "信息可视化"
+      ],
+      "url": "https://www.napkin.ai/",
+      "access": "需要账号；导出格式与方案以官网为准",
+      "platforms": [
+        "Web"
+      ],
+      "openSource": false,
+      "local": false,
+      "reviewedAt": "2026-08-01",
+      "brandIconPath": "/icons/napkin-ai-b68bd3001af4.png",
+      "brandIconSourceUrl": "https://www.napkin.ai/apple-touch-icon.png?v=2",
+      "brandIconSha256": "b68bd3001af41398ed01c4813825c48b0f8f620323cd54d9f7c28092097a5ea0",
+      "brandIconReviewedAt": "2026-08-01",
+      "brandThemeColor": "#FFFFFF",
+      "brandThemeColorSourceUrl": "https://www.napkin.ai/",
+      "brandThemeColorReviewedAt": "2026-08-01"
     },
     {
       "id": "notebooklm",
@@ -676,6 +1046,34 @@
       "brandThemeColorReviewedAt": null
     },
     {
+      "id": "consensus",
+      "name": "Consensus",
+      "summary": "面向学术研究的 AI 搜索工具，用于检索、整理和分析同行评审文献。",
+      "bestFor": "围绕科学问题查找论文证据并回到原文核验",
+      "category": "research-knowledge",
+      "tags": [
+        "学术搜索",
+        "论文",
+        "引用",
+        "证据"
+      ],
+      "url": "https://consensus.app/",
+      "access": "提供公开入口；搜索范围与方案以官网为准",
+      "platforms": [
+        "Web"
+      ],
+      "openSource": false,
+      "local": false,
+      "reviewedAt": "2026-08-01",
+      "brandIconPath": "/icons/consensus-4b930bcbc850.png",
+      "brandIconSourceUrl": "https://consensus.app/images/icon-384.png",
+      "brandIconSha256": "4b930bcbc850742ca3fc0dda974e4894d51d571cc475af7711c0f2b4387ecc01",
+      "brandIconReviewedAt": "2026-08-01",
+      "brandThemeColor": "#FFFFFF",
+      "brandThemeColorSourceUrl": "https://consensus.app/",
+      "brandThemeColorReviewedAt": "2026-08-01"
+    },
+    {
       "id": "zapier-ai",
       "name": "Zapier AI",
       "summary": "在 Zapier 的应用连接与自动化平台中提供 AI 工作流和智能体功能。",
@@ -732,6 +1130,91 @@
       "brandThemeColor": null,
       "brandThemeColorSourceUrl": null,
       "brandThemeColorReviewedAt": null
+    },
+    {
+      "id": "google-opal",
+      "name": "Google Opal",
+      "summary": "Google Labs 的无代码 AI 小应用与工作流构建器，可连接提示、模型和工具步骤。",
+      "bestFor": "把重复的研究、内容或处理流程封装成可复用的 AI 小应用",
+      "category": "automation-agents",
+      "tags": [
+        "无代码",
+        "工作流",
+        "AI 小应用",
+        "Google Labs"
+      ],
+      "url": "https://opal.google/",
+      "access": "Google Labs 实验；账号与地区可用性以官网为准",
+      "platforms": [
+        "Web"
+      ],
+      "openSource": false,
+      "local": false,
+      "reviewedAt": "2026-08-01",
+      "brandIconPath": "/icons/google-opal-f425205ef12d.png",
+      "brandIconSourceUrl": "https://opal.google/images/favicon.png",
+      "brandIconSha256": "f425205ef12d0bbdcc1a4e845ae7180529a6bbb5837af5456fdc859cf4c99bd7",
+      "brandIconReviewedAt": "2026-08-01",
+      "brandThemeColor": null,
+      "brandThemeColorSourceUrl": null,
+      "brandThemeColorReviewedAt": null
+    },
+    {
+      "id": "manus",
+      "name": "Manus",
+      "summary": "通用任务智能体，可规划并执行多步骤工作、处理资料和生成可交付结果。",
+      "bestFor": "将调研、整理、制作和发布等跨步骤任务交给一个执行型智能体",
+      "category": "automation-agents",
+      "tags": [
+        "通用智能体",
+        "任务执行",
+        "工作流",
+        "自动化"
+      ],
+      "url": "https://manus.im/",
+      "access": "需要账号；功能、连接器与方案以官网为准",
+      "platforms": [
+        "Web",
+        "移动端"
+      ],
+      "openSource": false,
+      "local": false,
+      "reviewedAt": "2026-08-01",
+      "brandIconPath": "/icons/manus-d2708c3650da.png",
+      "brandIconSourceUrl": "https://manus.im/apple-icon.png?apple-icon.153es_5lvwth1.png",
+      "brandIconSha256": "d2708c3650da4e54a7f248164794eb7b18cd48f9760e226250e4ece555d93361",
+      "brandIconReviewedAt": "2026-08-01",
+      "brandThemeColor": "#F8F8F7",
+      "brandThemeColorSourceUrl": "https://manus.im/",
+      "brandThemeColorReviewedAt": "2026-08-01"
+    },
+    {
+      "id": "genspark",
+      "name": "Genspark",
+      "summary": "整合文档、幻灯片、图像、视频、代码和设计能力的 AI 工作空间。",
+      "bestFor": "在同一工作区完成需要多种内容格式的复合型任务",
+      "category": "automation-agents",
+      "tags": [
+        "AI 工作空间",
+        "智能体",
+        "多格式",
+        "内容制作"
+      ],
+      "url": "https://www.genspark.ai/",
+      "access": "需要账号；功能与方案以官网为准",
+      "platforms": [
+        "Web"
+      ],
+      "openSource": false,
+      "local": false,
+      "reviewedAt": "2026-08-01",
+      "brandIconPath": "/icons/genspark-bc827af3c675.png",
+      "brandIconSourceUrl": "https://www.genspark.ai/favicon.ico",
+      "brandIconSha256": "bc827af3c6752e85e8086070c8f480bed9daf75f2d7a96fe3d98cdea9470606c",
+      "brandIconReviewedAt": "2026-08-01",
+      "brandThemeColor": "#FFFFFF",
+      "brandThemeColorSourceUrl": "https://www.genspark.ai/",
+      "brandThemeColorReviewedAt": "2026-08-01"
     },
     {
       "id": "openai-api",
@@ -821,6 +1304,65 @@
       "brandThemeColorReviewedAt": "2026-07-31"
     },
     {
+      "id": "openrouter",
+      "name": "OpenRouter",
+      "summary": "提供统一接口和路由层来调用多家模型与供应商，便于比较和切换推理服务。",
+      "bestFor": "用一个 API 接入多种模型，并按能力、可用性或策略选择路由",
+      "category": "model-apis",
+      "tags": [
+        "统一 API",
+        "模型路由",
+        "多模型",
+        "开发者"
+      ],
+      "url": "https://openrouter.ai/",
+      "access": "需要 API Key；模型、供应商和计费条款以官网为准",
+      "platforms": [
+        "API",
+        "Web"
+      ],
+      "openSource": false,
+      "local": false,
+      "reviewedAt": "2026-08-01",
+      "brandIconPath": "/icons/openrouter-c5e81a4cac65.png",
+      "brandIconSourceUrl": "https://openrouter.ai/favicon/glyph.png",
+      "brandIconSha256": "c5e81a4cac652230df83412dd050e9447bc9d86999573ceb32eafad600bffe7c",
+      "brandIconReviewedAt": "2026-08-01",
+      "brandThemeColor": null,
+      "brandThemeColorSourceUrl": null,
+      "brandThemeColorReviewedAt": null
+    },
+    {
+      "id": "hugging-face",
+      "name": "Hugging Face",
+      "summary": "开放 AI 平台，提供模型、数据集、应用空间以及推理和部署相关工具。",
+      "bestFor": "发现和评估开放模型，并把模型或演示接入开发工作流",
+      "category": "model-apis",
+      "tags": [
+        "模型 Hub",
+        "数据集",
+        "Spaces",
+        "推理"
+      ],
+      "url": "https://huggingface.co/",
+      "access": "公开浏览；托管推理、算力与私有资源方案以官网为准",
+      "platforms": [
+        "Web",
+        "API",
+        "Python"
+      ],
+      "openSource": false,
+      "local": false,
+      "reviewedAt": "2026-08-01",
+      "brandIconPath": "/icons/hugging-face-1a08353f90bd.png",
+      "brandIconSourceUrl": "https://huggingface.co/favicon.ico",
+      "brandIconSha256": "1a08353f90bd9fd8e21d727274013fb4b3aab67dfce44ea118a84f4b36f23d3a",
+      "brandIconReviewedAt": "2026-08-01",
+      "brandThemeColor": null,
+      "brandThemeColorSourceUrl": null,
+      "brandThemeColorReviewedAt": null
+    },
+    {
       "id": "ollama",
       "name": "Ollama",
       "summary": "用于在个人设备上下载、运行和调用多种开放模型的本地工具。",
@@ -879,6 +1421,67 @@
       "brandThemeColor": "#0A0A0A",
       "brandThemeColorSourceUrl": "https://lmstudio.ai/",
       "brandThemeColorReviewedAt": "2026-07-31"
+    },
+    {
+      "id": "comfyui",
+      "name": "ComfyUI",
+      "summary": "开源的节点式视觉 AI 工作流引擎，可组合本地模型、采样器和图像视频处理节点。",
+      "bestFor": "需要精细控制、可复用流程或本地模型组合的视觉生成任务",
+      "category": "local-open-source",
+      "tags": [
+        "开源",
+        "节点工作流",
+        "本地模型",
+        "图像视频"
+      ],
+      "url": "https://comfy.org/",
+      "access": "开源软件；本地运行所需硬件与模型由使用者准备",
+      "platforms": [
+        "Windows",
+        "macOS",
+        "Linux",
+        "自托管"
+      ],
+      "openSource": true,
+      "local": true,
+      "reviewedAt": "2026-08-01",
+      "brandIconPath": "/icons/comfyui-a5bd10108e16.png",
+      "brandIconSourceUrl": "https://comfy.org/apple-touch-icon.png",
+      "brandIconSha256": "a5bd10108e169b8f685941b7cb92533b0996c45b97f0663b1d87aa5758fb35c4",
+      "brandIconReviewedAt": "2026-08-01",
+      "brandThemeColor": "#211927",
+      "brandThemeColorSourceUrl": "https://comfy.org/",
+      "brandThemeColorReviewedAt": "2026-08-01"
+    },
+    {
+      "id": "jan",
+      "name": "Jan",
+      "summary": "开源桌面 AI 助手，可在本机运行开放模型，也可连接云端模型服务。",
+      "bestFor": "优先隐私和离线使用，同时保留接入云模型的桌面对话工作流",
+      "category": "local-open-source",
+      "tags": [
+        "开源",
+        "本地模型",
+        "离线",
+        "桌面端"
+      ],
+      "url": "https://www.jan.ai/",
+      "access": "开源软件；本地模型与云端服务条件分别以官方说明为准",
+      "platforms": [
+        "Windows",
+        "macOS",
+        "Linux"
+      ],
+      "openSource": true,
+      "local": true,
+      "reviewedAt": "2026-08-01",
+      "brandIconPath": null,
+      "brandIconSourceUrl": null,
+      "brandIconSha256": null,
+      "brandIconReviewedAt": null,
+      "brandThemeColor": null,
+      "brandThemeColorSourceUrl": null,
+      "brandThemeColorReviewedAt": null
     }
   ]
 }

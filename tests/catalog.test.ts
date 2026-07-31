@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { categories, tools, validateCatalog } from '../src/data/catalog';
 
 describe('catalog validation', () => {
-  it('contains a modest, high-signal starter set across every category', () => {
+  it('contains a high-signal curated set across every category', () => {
     expect(tools.length).toBeGreaterThanOrEqual(20);
     expect(new Set(tools.map((tool) => tool.category)).size).toBe(categories.length);
     expect(validateCatalog(tools, categories)).toEqual([]);
@@ -44,7 +44,7 @@ describe('catalog validation', () => {
   it('accepts omitted, null, and fully evidenced optional brand fields', () => {
     const withoutBrandFields = { ...tools[0] } as Record<string, unknown>;
     for (const field of [
-      'brandIconPath', 'brandIconSourceUrl', 'brandIconSha256', 'brandIconReviewedAt',
+      'brandIconPath', 'brandIconMode', 'brandIconSourceUrl', 'brandIconSha256', 'brandIconReviewedAt',
       'brandThemeColor', 'brandThemeColorSourceUrl', 'brandThemeColorReviewedAt',
     ]) delete withoutBrandFields[field];
     const withNullBrandFields = {
@@ -60,6 +60,7 @@ describe('catalog validation', () => {
     const withVerifiedBrandFields = {
       ...tools[0],
       brandIconPath: `/icons/${tools[0].id}.png`,
+      brandIconMode: 'manual',
       brandIconSourceUrl: 'https://chatgpt.com/favicon.ico',
       brandIconSha256: 'a'.repeat(64),
       brandIconReviewedAt: '2026-07-31',
@@ -95,6 +96,7 @@ describe('catalog validation', () => {
     const errors = validateCatalog([{
       ...tools[0],
       brandIconPath: `/icons/${tools[0].id}.png`,
+      brandIconMode: 'automatic',
       brandIconSourceUrl: 'http://third-party.example/icon.png',
       brandIconSha256: 'not-a-digest',
       brandIconReviewedAt: '31-07-2026',
@@ -104,6 +106,7 @@ describe('catalog validation', () => {
     }], categories);
 
     expect(errors).toEqual(expect.arrayContaining([
+      expect.stringContaining('brandIconMode'),
       expect.stringContaining('brandIconSourceUrl'),
       expect.stringContaining('brandIconSha256'),
       expect.stringContaining('brandIconReviewedAt'),

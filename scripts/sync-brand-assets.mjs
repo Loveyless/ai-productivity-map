@@ -22,9 +22,13 @@ import {
 } from './lib/brand-publication.mjs';
 import {
   dateInTimeZone,
+  iconSourceForVerifiedBytes,
+  manualIconLocalEvidenceWarning,
+  manualIconSourceNeedsFetch,
   parseSyncArguments,
   selectToolsForSync,
   shouldFailBrandCheck,
+  shouldFetchBrandIcon,
 } from './lib/brand-sync.mjs';
 import { rasterizeIconWithTimeout } from './lib/icon-rasterization.mjs';
 import { requestPublicHttps } from './lib/public-network.mjs';
@@ -115,6 +119,39 @@ async function fetchLimited(url, { accept, acceptsType, maxBytes, deadline, appr
   return { body: response.body, type, url: response.url };
 }
 
+async function inspectManualIconSource(tool, page, deadline, approvedHosts, warnings) {
+  if (tool.brandIconMode !== 'manual' || !tool.brandIconPath) return;
+  if (!tool.brandIconSourceUrl) {
+    warnings.push('manual icon source is missing');
+    return;
+  }
+  if (!manualIconSourceNeedsFetch(tool, page.url)) return;
+
+  try {
+    const sourcePath = new URL(tool.brandIconSourceUrl).pathname.toLowerCase();
+    const expectsImage = /\.(?:png|jpe?g|webp|avif|gif|ico)$/.test(sourcePath);
+    const source = await fetchLimited(tool.brandIconSourceUrl, {
+      accept: expectsImage
+        ? 'image/png,image/jpeg,image/webp,image/avif,image/gif,image/x-icon,image/vnd.microsoft.icon'
+        : 'text/html,application/xhtml+xml;q=0.9',
+      acceptsType: (type) => expectsImage
+        ? /^image\/(?:png|jpe?g|webp|avif|gif|x-icon|vnd\.microsoft\.icon)$/.test(type)
+        : type === 'text/html' || type === 'application/xhtml+xml',
+      maxBytes: expectsImage ? MAX_IMAGE_BYTES : MAX_HTML_BYTES,
+      deadline,
+      approvedHosts,
+    });
+    if (expectsImage) {
+      const rasterized = await rasterizeIconWithTimeout(source.body, remainingTimeout(deadline));
+      if (sha256Hex(rasterized) !== tool.brandIconSha256) {
+        warnings.push('manual icon source bytes do not match catalog SHA-256');
+      }
+    }
+  } catch (error) {
+    warnings.push(`manual icon source: ${error.message}`);
+  }
+}
+
 async function inspectTool(tool, fetchIcon) {
   const deadline = Date.now() + TOOL_DEADLINE_MS;
   const approvedHosts = approvedHostsForTool(tool);
@@ -132,6 +169,7 @@ async function inspectTool(tool, fetchIcon) {
     return { tool, icon: null, themeColor: null, themeColorSourceUrl: null, warnings: [`official page: ${error.message}`] };
   }
 
+  await inspectManualIconSource(tool, page, deadline, approvedHosts, warnings);
   const htmlMetadata = parseHtmlMetadata(page.body.toString('utf8'), page.url, approvedHosts);
   let manifestMetadata = { themeColor: null, themeColorSourceUrl: null, iconCandidates: [] };
   if (htmlMetadata.manifestUrl) {
@@ -301,9 +339,16 @@ if (selectedTools.length === 0) {
 }
 
 console.log(`Inspecting official metadata for ${selectedTools.length} tool(s), concurrency ${CONCURRENCY}${options.dryRun ? ' (dry-run)' : ''}...`);
-const inspections = await mapWithConcurrency(selectedTools, CONCURRENCY, (tool) => {
-  const needsIcon = options.refresh || !tool.brandIconPath || iconValidity.get(tool.id) !== true;
-  return inspectTool(tool, needsIcon);
+const inspections = await mapWithConcurrency(selectedTools, CONCURRENCY, async (tool) => {
+  const localValid = iconValidity.get(tool.id);
+  const needsIcon = shouldFetchBrandIcon(tool, {
+    refresh: options.refresh,
+    localValid,
+  });
+  const inspection = await inspectTool(tool, needsIcon);
+  const manualWarning = manualIconLocalEvidenceWarning(tool, localValid);
+  if (manualWarning) inspection.warnings.push(manualWarning);
+  return inspection;
 });
 
 const reviewedToday = dateInTimeZone();
@@ -324,13 +369,14 @@ for (const inspection of inspections) {
     const localIconPath = sameVerifiedBytes
       ? tool.brandIconPath
       : contentAddressedIconPath(tool.id, inspection.icon.bytes);
+    const iconSourceUrl = iconSourceForVerifiedBytes(tool, sameVerifiedBytes, inspection.icon.sourceUrl);
     if (!sameVerifiedBytes) {
       pendingIcons.push({ path: absoluteIconPath(tool.id, localIconPath), bytes: inspection.icon.bytes });
     }
     const iconEvidenceChanged = proposed.brandIconPath !== localIconPath ||
-      proposed.brandIconSourceUrl !== inspection.icon.sourceUrl || proposed.brandIconSha256 !== digest;
+      proposed.brandIconSourceUrl !== iconSourceUrl || proposed.brandIconSha256 !== digest;
     proposed.brandIconPath = localIconPath;
-    proposed.brandIconSourceUrl = inspection.icon.sourceUrl;
+    proposed.brandIconSourceUrl = iconSourceUrl;
     proposed.brandIconSha256 = digest;
     if (iconEvidenceChanged) proposed.brandIconReviewedAt = reviewedToday;
   }

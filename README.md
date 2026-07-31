@@ -37,10 +37,11 @@ npm run validate:links   # 可选：联网检查官方链接
 - 保守的访问/订阅描述，不写未经核实的价格或保证；
 - `openSource`、`local` 指示和 `reviewedAt` 复核日期。
 
-品牌字段均为可选且可设为 `null`，没有充分官方证据时应保持为空：
+品牌证据字段均为可选且可设为 `null`，没有充分官方证据时应保持为空；`brandIconMode` 是仅在需要人工锁定时出现的策略枚举：
 
 - `brandIconPath`：仓库 `public/icons/` 下的本地图标 PNG 路径；图标会在入库前栅格化，并使用工具 ID 绑定的稳定/内容寻址文件名；
-- `brandIconSourceUrl`：生成该本地图标时实际使用的官方 HTTPS URL；
+- `brandIconMode`：仅在人工确认自动候选会错标时设为 `manual`；此时自动同步保留已审核图标或有意为空的回退，但离线 PNG/SHA 和官方来源校验仍生效；
+- `brandIconSourceUrl`：自动同步时记录实际使用的官方图标 URL；人工离线导入时可记录展示该产品标识的官方证据页；
 - `brandIconSha256`：本地 PNG 字节的 SHA-256，用于防止证据与文件漂移；
 - `brandIconReviewedAt`：图标来源、字节和本地文件最近被采纳或变更的日期；
 - `brandThemeColor`：官网明确声明并规范化为六位十六进制的主题色；
@@ -51,7 +52,7 @@ npm run validate:links   # 可选：联网检查官方链接
 
 ## 品牌资产同步
 
-品牌同步脚本只读取工具的官方页面，图标依次采用 `apple-touch-icon`、页面 icon/favicon 元数据、官方 manifest 图标和官网源站 `/favicon.ico`。页面、Manifest、图标和每次重定向都必须留在该工具现有证据形成的已批准 host 集合内；新的跨域 CDN host 必须先人工核验，HTML `<base>` 不能扩大信任边界。主题色只采用页面 `theme-color`，其次采用官方 manifest 的 `theme_color`；不从类别或图标推断颜色。联网阶段执行公网地址校验和每工具绝对墙钟超时；远程位图和 ICO 会在可终止 Worker 内经过类型、体积、帧数、尺寸和解码检查，再统一栅格化为 96×96 的本地 PNG。自动同步拒绝 SVG，避免依赖不完整的 XML/CSS 清洗。发布阶段拒绝 symlink，使用内容寻址路径、完整 SHA-256、不可覆盖写入、协作单写者锁及 rename 后 fsync/readback。页面运行时不会热链远程图标。
+品牌同步脚本只读取工具的官方页面，图标依次采用 `apple-touch-icon`、页面 icon/favicon 元数据、官方 manifest 图标和官网源站 `/favicon.ico`。页面、Manifest、图标和每次重定向都必须留在该工具现有证据形成的已批准 host 集合内；新的跨域 CDN host 必须先人工核验，HTML `<base>` 不能扩大信任边界。主题色只采用页面 `theme-color`，其次采用官方 manifest 的 `theme_color`；不从类别或图标推断颜色。联网阶段执行公网地址校验和每工具绝对墙钟超时；远程位图和 ICO 会在可终止 Worker 内经过类型、体积、帧数、尺寸和解码检查，再统一栅格化为 96×96 的本地 PNG。自动同步拒绝 SVG，避免依赖不完整的 XML/CSS 清洗。相同 PNG 字节只因部署 URL 改变时保留原来源证据；`brandIconMode: "manual"` 的少数人工确认项不会被自动 favicon 覆盖。发布阶段拒绝 symlink，使用内容寻址路径、完整 SHA-256、不可覆盖写入、协作单写者锁及 rename 后 fsync/readback。页面运行时不会热链远程图标。
 
 ```bash
 npm run sync:brands                         # 只处理缺失或丢失的图标

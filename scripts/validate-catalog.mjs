@@ -135,6 +135,9 @@ function validateCatalog(catalog) {
     if (tool.brandIconPath !== undefined && tool.brandIconPath !== null && !hasIcon) {
       errors.push(`tool[${index}].brandIconPath must be an ID-bound local PNG path or null`);
     }
+    if (tool.brandIconMode !== undefined && tool.brandIconMode !== 'manual') {
+      errors.push(`tool[${index}].brandIconMode must be "manual" when present`);
+    }
     if (tool.brandIconSourceUrl !== undefined && tool.brandIconSourceUrl !== null && !isHttpsUrl(tool.brandIconSourceUrl)) {
       errors.push(`tool[${index}].brandIconSourceUrl must be an HTTPS URL or null`);
     }

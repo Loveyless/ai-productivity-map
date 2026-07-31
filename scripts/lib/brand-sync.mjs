@@ -51,6 +51,35 @@ export function shouldFailBrandCheck(options, { changed, inconclusive }) {
   return options.check === true && (changed > 0 || inconclusive > 0);
 }
 
+export function shouldFetchBrandIcon(tool, { refresh, localValid }) {
+  if (tool.brandIconMode === 'manual') return false;
+  return refresh || !tool.brandIconPath || localValid !== true;
+}
+
+export function manualIconLocalEvidenceWarning(tool, localValid) {
+  if (tool.brandIconMode === 'manual' && tool.brandIconPath && localValid !== true) {
+    return 'manual icon local evidence is missing or invalid';
+  }
+  return null;
+}
+
+export function manualIconSourceNeedsFetch(tool, pageUrl) {
+  if (tool.brandIconMode !== 'manual' || !tool.brandIconPath || !tool.brandIconSourceUrl) return false;
+  try {
+    return new URL(tool.brandIconSourceUrl).href !== new URL(pageUrl).href;
+  } catch {
+    return true;
+  }
+}
+
+export function iconSourceForVerifiedBytes(tool, sameVerifiedBytes, discoveredSourceUrl) {
+  if (sameVerifiedBytes &&
+      typeof tool.brandIconSourceUrl === 'string' && tool.brandIconSourceUrl.length > 0) {
+    return tool.brandIconSourceUrl;
+  }
+  return discoveredSourceUrl;
+}
+
 export function selectToolsForSync(tools, options, iconExists) {
   if (options.ids.length > 0) {
     const knownIds = new Set(tools.map((tool) => tool.id));
@@ -60,5 +89,8 @@ export function selectToolsForSync(tools, options, iconExists) {
     return tools.filter((tool) => selectedIds.has(tool.id));
   }
   if (options.all) return [...tools];
-  return tools.filter((tool) => !tool.brandIconPath || !iconExists(tool));
+  return tools.filter((tool) => {
+    if (tool.brandIconMode === 'manual') return Boolean(tool.brandIconPath) && !iconExists(tool);
+    return !tool.brandIconPath || !iconExists(tool);
+  });
 }
