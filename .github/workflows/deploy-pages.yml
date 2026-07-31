@@ -27,6 +27,12 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
+      - name: Run tests
+        run: npm test
+      - name: Validate catalog and local brand assets
+        run: npm run validate:catalog
+      - name: Check Astro and TypeScript
+        run: npm run check
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Build static site

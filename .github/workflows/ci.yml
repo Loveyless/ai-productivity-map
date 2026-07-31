@@ -22,7 +22,7 @@ jobs:
         run: npm ci
       - name: Run tests
         run: npm test
-      - name: Validate catalog
+      - name: Validate catalog and local brand assets
         run: npm run validate:catalog
       - name: Check Astro and TypeScript
         run: npm run check

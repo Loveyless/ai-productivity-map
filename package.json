@@ -12,16 +12,22 @@
     "test:watch": "vitest",
     "check": "astro check",
     "validate:catalog": "node scripts/validate-catalog.mjs",
-    "validate:links": "node scripts/validate-catalog.mjs --check-links"
+    "validate:links": "node scripts/validate-catalog.mjs --check-links",
+    "sync:brands": "node scripts/sync-brand-assets.mjs"
   },
   "engines": {
-    "node": ">=22"
+    "node": ">=22.22.2"
   },
   "dependencies": {
     "astro": "^7.1.6"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "@types/node": "22.20.1",
+    "htmlparser2": "^12.0.0",
+    "icojs": "1.0.0",
+    "jsonc-parser": "^3.3.1",
+    "sharp": "^0.35.3",
     "typescript": "^6.0.3",
     "vitest": "^4.1.10"
   }

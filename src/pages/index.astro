@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { categories, reviewedAt, tools, type CategoryId } from '../data/catalog';
+import { withBasePath } from '../lib/paths';
 
 const title = 'AI 生产力地图 | 按任务发现实用 AI 工具';
 const description = '一份中文优先、按实际任务整理的 AI 生产力工具目录。包含官方链接、适用场景、访问方式和审核日期。';
@@ -8,6 +9,7 @@ const base = import.meta.env.BASE_URL;
 const github = 'https://github.com/Loveyless/ai-productivity-map';
 const issueChooser = `${github}/issues/new/choose`;
 const categoryById = new Map(categories.map((category) => [category.id, category]));
+const neutralBrandColor = '#64736E';
 
 function markFor(name: string): string {
   const words = name.replace(/[^\p{L}\p{N} ]/gu, '').split(/\s+/).filter(Boolean);
@@ -22,7 +24,14 @@ function markFor(name: string): string {
   <header class="site-header">
     <div class="header-inner">
       <a class="brand" href={base} aria-label="AI 生产力地图首页">
-        <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+        <img
+          class="brand-mark"
+          src={withBasePath(base, 'favicon.svg')}
+          width="40"
+          height="40"
+          alt=""
+          aria-hidden="true"
+        />
         <span class="brand-copy">
           <strong>AI 生产力地图</strong>
           <small>AI Productivity Map</small>
@@ -45,7 +54,7 @@ function markFor(name: string): string {
           <p class="hero-statement">从要完成的事出发，找到真正合适的工具。</p>
           <p class="hero-detail">不做数量竞赛。这里整理具体用途、访问边界与复核日期，帮助你更快做出判断。</p>
 
-          <form class="search-form" id="catalog-search" role="search">
+          <div class="search-form" id="catalog-search" role="search">
             <label for="search-input">你现在想完成什么？</label>
             <div class="search-row">
               <span class="search-symbol" aria-hidden="true"></span>
@@ -59,7 +68,7 @@ function markFor(name: string): string {
               />
               <button class="clear-search" id="clear-search" type="button" hidden>清空</button>
             </div>
-          </form>
+          </div>
         </div>
 
         <div class="route-map" aria-hidden="true">
@@ -109,16 +118,34 @@ function markFor(name: string): string {
         <div class="tool-grid" id="tool-grid">
           {tools.map((tool) => {
             const category = categoryById.get(tool.category as CategoryId);
+            const iconSrc = tool.brandIconPath ? withBasePath(base, tool.brandIconPath) : null;
             return (
-              <article class="tool-card" data-tool-id={tool.id} data-tone={tool.category}>
+              <article
+                class="tool-card"
+                data-tool-id={tool.id}
+                style={`--brand-color: ${tool.brandThemeColor ?? neutralBrandColor}`}
+              >
                 <header class="tool-header">
-                  <span class="tool-mark" aria-hidden="true">{markFor(tool.name)}</span>
+                  <span class="tool-mark" aria-hidden="true">
+                    <span class="tool-initials">{markFor(tool.name)}</span>
+                    {iconSrc && (
+                      <img
+                        class="tool-icon"
+                        src={iconSrc}
+                        width="32"
+                        height="32"
+                        loading="lazy"
+                        decoding="async"
+                        alt=""
+                      />
+                    )}
+                  </span>
                   <div class="tool-title-wrap">
                     <h3>{tool.name}</h3>
                     <span class="category-label">{category?.label}</span>
                   </div>
                   {(tool.openSource || tool.local) && (
-                    <div class="status-flags" aria-label="工具属性">
+                    <div class="status-flags" role="group" aria-label="工具属性">
                       {tool.openSource && <span>开源</span>}
                       {tool.local && <span>可本地</span>}
                     </div>
@@ -217,7 +244,10 @@ function markFor(name: string): string {
   <footer class="site-footer">
     <div class="footer-inner">
       <p><strong>AI 生产力地图</strong><span>Chinese-first, task-oriented, openly maintained.</span></p>
-      <p>目录信息仅作发现与初步比较，请在采用工具前核查官网条款。</p>
+      <div class="footer-notes">
+        <p>目录信息仅作发现与初步比较，请在采用工具前核查官网条款。</p>
+        <p>产品名称与标识仅用于识别，相关商标归各自所有者所有。</p>
+      </div>
     </div>
   </footer>
 
@@ -225,7 +255,6 @@ function markFor(name: string): string {
     import { tools } from '../data/catalog';
     import { filterTools } from '../lib/catalog';
 
-    const form = document.querySelector<HTMLFormElement>('#catalog-search');
     const input = document.querySelector<HTMLInputElement>('#search-input');
     const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-tool-id]'));
     const categoryButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-category]'));
@@ -234,6 +263,7 @@ function markFor(name: string): string {
     const clearButton = document.querySelector<HTMLButtonElement>('#clear-search');
     const emptyState = document.querySelector<HTMLElement>('#empty-state');
     const emptyReset = document.querySelector<HTMLButtonElement>('#empty-reset');
+    const brandIcons = Array.from(document.querySelectorAll<HTMLImageElement>('.tool-icon'));
 
     let activeCategory = 'all';
 
@@ -270,7 +300,6 @@ function markFor(name: string): string {
       if (focusSearch) input.focus();
     }
 
-    form?.addEventListener('submit', (event) => event.preventDefault());
     input?.addEventListener('input', applyFilters);
     clearButton?.addEventListener('click', () => {
       if (!input) return;
@@ -293,6 +322,18 @@ function markFor(name: string): string {
         event.preventDefault();
         categoryButtons[target].focus();
       });
+    });
+
+    brandIcons.forEach((icon) => {
+      const mark = icon.closest<HTMLElement>('.tool-mark');
+      const showIcon = () => mark?.classList.add('is-icon-loaded');
+      const showFallback = () => mark?.classList.remove('is-icon-loaded');
+      icon.addEventListener('load', showIcon);
+      icon.addEventListener('error', showFallback);
+      if (icon.complete) {
+        if (icon.naturalWidth > 0) showIcon();
+        else showFallback();
+      }
     });
   </script>
 </Layout>

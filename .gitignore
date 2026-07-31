@@ -3,3 +3,4 @@ dist/
 .astro/
 .DS_Store
 *.log
+src/data/catalog.json.brand-sync.lock
