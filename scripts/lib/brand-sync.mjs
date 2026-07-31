@@ -27,6 +27,7 @@ export function parseSyncArguments(argumentsList) {
     else if (argument === '--check') {
       options.check = true;
       options.dryRun = true;
+      options.refresh = true;
     } else if (argument === '--help' || argument === '-h') options.help = true;
     else if (argument === '--id') {
       const value = argumentsList[index + 1];

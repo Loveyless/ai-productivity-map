@@ -31,8 +31,7 @@ export function isPublicIpAddress(address) {
     if (normalized.startsWith('64:ff9b:')) return false;
     if (normalized.startsWith('100:')) return false;
     if (normalized.startsWith('2002:')) return false;
-    if (/^(?:fc|fd)/.test(normalized)) return false;
-    if (/^fe[89ab]/.test(normalized)) return false;
+    if (/^(?:fc|fd|fe[89ab]|fe[c-f])/.test(normalized)) return false;
     if (normalized.startsWith('ff')) return false;
     if (normalized.startsWith('2001:db8:') || normalized === '2001:db8::') return false;
     return true;

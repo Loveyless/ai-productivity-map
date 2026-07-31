@@ -25,6 +25,14 @@ describe('official icon rasterization', () => {
     await expect(rasterizeIcon(svg)).rejects.toThrow(/SVG input is not accepted/);
   });
 
+  it('rejects gzip-compressed SVG (SVGZ) instead of decoding it as a bitmap', async () => {
+    const { gzipSync } = await import('node:zlib');
+    const svg = Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><rect width="32" height="32" fill="#000"/></svg>');
+    const svgz = gzipSync(svg);
+
+    await expect(rasterizeIcon(svgz)).rejects.toThrow(/SVG input is not accepted|compressed SVG|gzip/i);
+  });
+
   it('decodes a multi-size ICO and emits a safe 96px PNG', async () => {
     const small = await sharp({
       create: { width: 16, height: 16, channels: 4, background: '#FF4F00' },

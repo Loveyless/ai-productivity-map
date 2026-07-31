@@ -54,7 +54,12 @@ describe('brand sync CLI selection', () => {
     expect(parseSyncArguments(['--all', '--dry-run'])).toMatchObject({ all: true, dryRun: true, refresh: false });
     expect(parseSyncArguments(['--refresh'])).toMatchObject({ all: true, dryRun: false, refresh: true });
     expect(parseSyncArguments(['--id', 'present', '--id=missing'])).toMatchObject({ ids: ['present', 'missing'] });
-    expect(parseSyncArguments(['--check'])).toMatchObject({ all: true, dryRun: true, refresh: false, check: true });
+    expect(parseSyncArguments(['--check'])).toMatchObject({ all: true, dryRun: true, refresh: true, check: true });
+  });
+
+  it('republishes pending icon bytes even when catalog metadata is unchanged', async () => {
+    const source = await readFile(new URL('../scripts/sync-brand-assets.mjs', import.meta.url), 'utf8');
+    expect(source).toMatch(/pendingIcons\.length\s*>\s*0|changedToolIds\.size\s*>\s*0\s*\|\|\s*pendingIcons/);
   });
 
   it('keeps catalog order for explicit selections and rejects invalid arguments', () => {

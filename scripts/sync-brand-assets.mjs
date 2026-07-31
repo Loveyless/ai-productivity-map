@@ -352,12 +352,14 @@ for (const inspection of inspections) {
   if (inspection.warnings.length > 0) warnings.push(`${tool.id}: ${inspection.warnings.join('; ')}`);
 }
 
-if (!options.dryRun && changedToolIds.size > 0) {
+if (!options.dryRun && (changedToolIds.size > 0 || pendingIcons.length > 0)) {
   const releaseLock = await acquireSingleWriterLock(`${catalogPath}.brand-sync.lock`);
   try {
     await assertCatalogUnchanged(catalogPath, baselineCatalogSource);
     for (const icon of pendingIcons) await writeImmutableFile(icon.path, icon.bytes);
-    await atomicWriteCatalog(catalogPath, updatedCatalogSource, baselineCatalogSource);
+    if (changedToolIds.size > 0) {
+      await atomicWriteCatalog(catalogPath, updatedCatalogSource, baselineCatalogSource);
+    }
   } finally {
     await releaseLock();
   }

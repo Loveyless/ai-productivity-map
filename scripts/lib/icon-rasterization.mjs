@@ -1,4 +1,5 @@
 import { Worker } from 'node:worker_threads';
+import { gunzipSync, inflateSync } from 'node:zlib';
 import { decodeIco, isIco } from 'icojs';
 import sharp from 'sharp';
 
@@ -7,10 +8,31 @@ const MAX_INPUT_PIXELS = 16 * 1024 * 1024;
 const MAX_ICO_FRAMES = 32;
 const MAX_ICO_FRAME_DIMENSION = 256;
 const MAX_ICO_FRAME_BYTES = 512 * 1024;
+const MAX_DECOMPRESSED_SVG_PROBE_BYTES = 2 * 1024 * 1024;
 
 function looksLikeSvg(buffer) {
   const source = buffer.toString('utf8');
   return /<\?xml\b|<!doctype\b|<(?:[A-Za-z_][\w.-]*:)?svg(?:\s|>)/i.test(source);
+}
+
+function looksLikeCompressedSvg(buffer) {
+  // SVGZ is commonly gzip-wrapped SVG. Also reject raw deflate wrappers that expand to SVG.
+  const probes = [];
+  if (buffer.length >= 2 && buffer[0] === 0x1f && buffer[1] === 0x8b) {
+    try {
+      probes.push(gunzipSync(buffer, { maxOutputLength: MAX_DECOMPRESSED_SVG_PROBE_BYTES }));
+    } catch {
+      // Not a valid gzip payload; leave ordinary image decoding to handle it.
+    }
+  }
+  if (buffer.length >= 2 && (buffer[0] === 0x78 || buffer[0] === 0x01 || buffer[0] === 0x9c || buffer[0] === 0xda)) {
+    try {
+      probes.push(inflateSync(buffer, { maxOutputLength: MAX_DECOMPRESSED_SVG_PROBE_BYTES }));
+    } catch {
+      // Not a valid deflate payload.
+    }
+  }
+  return probes.some((candidate) => looksLikeSvg(candidate));
 }
 
 async function decodeLargestIcoFrame(buffer) {
@@ -74,6 +96,9 @@ export async function rasterizeIcon(input) {
   let buffer = Buffer.from(input);
   if (looksLikeSvg(buffer)) {
     throw new Error('SVG input is not accepted by automated brand sync');
+  }
+  if (looksLikeCompressedSvg(buffer)) {
+    throw new Error('compressed SVG input is not accepted by automated brand sync');
   }
   if (isIco(buffer)) {
     buffer = await decodeLargestIcoFrame(buffer);

@@ -23,6 +23,8 @@ describe('brand sync public-network boundary', () => {
     '2002:7f00:1::',
     'fc00::1',
     'fe80::1',
+    'fec0::1',
+    'fed0::abcd',
   ])('rejects non-public address %s', (address) => {
     expect(isPublicIpAddress(address)).toBe(false);
   });
