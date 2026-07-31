@@ -69,7 +69,10 @@ export async function resolvePublicHttpsUrl(candidate, resolver = resolveAllAddr
     try {
       addresses = await resolver(hostname);
     } catch (error) {
-      throw new Error(`URL host could not be resolved publicly: ${error?.code ?? error?.message ?? 'DNS error'}`);
+      const message = `URL host could not be resolved publicly: ${error?.code ?? error?.message ?? 'DNS error'}`;
+      throw Object.assign(new Error(message, { cause: error }), {
+        code: typeof error?.code === 'string' ? error.code : undefined,
+      });
     }
     rows = Array.isArray(addresses) ? addresses : [addresses];
   }

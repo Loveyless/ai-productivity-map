@@ -171,9 +171,12 @@ export function parseWebManifest(source, manifestUrl, approvedHosts) {
   }
 
   const themeColor = normalizeThemeColor(manifest.theme_color);
-  const icons = Array.isArray(manifest.icons) ? manifest.icons.slice(0, 64) : [];
+  const icons = Array.isArray(manifest.icons)
+    ? manifest.icons
+      .filter((icon) => icon && typeof icon === 'object' && !Array.isArray(icon))
+      .slice(0, 64)
+    : [];
   const iconCandidates = icons.sort(byLargestDeclaredSize).slice(0, MAX_ICON_CANDIDATES).flatMap((icon) => {
-    if (!icon || typeof icon !== 'object' || Array.isArray(icon)) return [];
     const url = resolveMetadataUrl(icon.src, manifestUrl, approvedHosts);
     return url ? [{ kind: 'manifest', url }] : [];
   });

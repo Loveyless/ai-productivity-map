@@ -1,6 +1,6 @@
 import { createHash, randomBytes } from 'node:crypto';
 import { constants } from 'node:fs';
-import { link, lstat, open, readFile, realpath, unlink } from 'node:fs/promises';
+import { link, lstat, open, readFile, realpath, rename, unlink } from 'node:fs/promises';
 import { basename, dirname, join, resolve } from 'node:path';
 
 export const TOOL_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -48,46 +48,104 @@ export async function syncDirectory(path) {
   }
 }
 
-export async function acquireSingleWriterLock(path) {
+async function defaultIsProcessAlive(pid) {
+  if (!Number.isInteger(pid) || pid <= 0) return false;
+  try {
+    process.kill(pid, 0);
+    return true;
+  } catch (error) {
+    return error?.code !== 'ESRCH';
+  }
+}
+
+async function readLockRecord(path) {
+  try {
+    const handle = await open(path, constants.O_RDONLY | constants.O_NOFOLLOW);
+    try {
+      const raw = await handle.readFile('utf8');
+      const data = JSON.parse(raw);
+      if (!data || typeof data !== 'object' || Array.isArray(data)) return null;
+      const pid = Number(data.pid);
+      return {
+        pid: Number.isInteger(pid) ? pid : null,
+        startedAt: typeof data.startedAt === 'string' ? data.startedAt : null,
+      };
+    } finally {
+      await handle.close();
+    }
+  } catch {
+    return null;
+  }
+}
+
+export async function acquireSingleWriterLock(path, {
+  isProcessAlive = defaultIsProcessAlive,
+} = {}) {
   const directory = await assertSafePublicationDirectory(dirname(path));
   const target = resolve(path);
   if (dirname(target) !== directory) throw new Error('lock file must be a direct child of its directory');
-  let handle;
-  try {
-    handle = await open(
+
+  const createLock = async () => {
+    const handle = await open(
       target,
       constants.O_CREAT | constants.O_EXCL | constants.O_WRONLY | constants.O_NOFOLLOW,
       0o600,
     );
-  } catch (error) {
-    if (error?.code === 'EEXIST') throw new Error('brand publication is already running');
-    throw error;
-  }
-  try {
-    await handle.writeFile(`${JSON.stringify({ pid: process.pid, startedAt: new Date().toISOString() })}\n`);
-    await handle.sync();
-    await syncDirectory(directory);
-  } catch (error) {
-    await handle.close().catch(() => {});
-    await unlink(target).catch(() => {});
-    throw error;
-  }
-  let released = false;
-  let closed = false;
-  let unlinked = false;
-  return async () => {
-    if (released) return;
-    if (!closed) {
-      await handle.close();
-      closed = true;
+    try {
+      await handle.writeFile(`${JSON.stringify({ pid: process.pid, startedAt: new Date().toISOString() })}\n`);
+      await handle.sync();
+      await syncDirectory(directory);
+    } catch (error) {
+      await handle.close().catch(() => {});
+      await unlink(target).catch(() => {});
+      throw error;
     }
-    if (!unlinked) {
-      await unlink(target);
-      unlinked = true;
-    }
-    await syncDirectory(directory);
-    released = true;
+    let released = false;
+    let closed = false;
+    let unlinked = false;
+    return async () => {
+      if (released) return;
+      if (!closed) {
+        await handle.close();
+        closed = true;
+      }
+      if (!unlinked) {
+        await unlink(target);
+        unlinked = true;
+      }
+      await syncDirectory(directory);
+      released = true;
+    };
   };
+
+  try {
+    return await createLock();
+  } catch (error) {
+    if (error?.code !== 'EEXIST') throw error;
+  }
+
+  const existing = await readLockRecord(target);
+  if (existing?.pid && await isProcessAlive(existing.pid)) {
+    throw new Error('brand publication is already running');
+  }
+
+  // Reclaim only when the recorded owner is gone. Use rename-away so a live
+  // owner that just released/reacquired cannot be raced into a shared lock.
+  const stale = join(
+    directory,
+    `.${basename(target)}.stale.${process.pid}.${randomBytes(6).toString('hex')}`,
+  );
+  try {
+    await rename(target, stale);
+  } catch (error) {
+    if (error?.code === 'ENOENT') {
+      return createLock();
+    }
+    throw new Error('brand publication is already running');
+  }
+  await unlink(stale).catch(() => {});
+  await syncDirectory(directory);
+  return createLock();
 }
 
 export async function writeImmutableFile(path, contents) {

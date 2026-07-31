@@ -142,6 +142,19 @@ describe('manifest and color parsing', () => {
     ]);
   });
 
+  it('ignores malformed manifest icon entries without losing valid metadata', () => {
+    const metadata = parseWebManifest(JSON.stringify({
+      theme_color: '#abcdef',
+      icons: [null, 'bad', 7, { src: 'valid.png', sizes: '192x192' }],
+    }), 'https://product.example/app.webmanifest');
+
+    expect(metadata).toEqual({
+      themeColor: '#ABCDEF',
+      themeColorSourceUrl: 'https://product.example/app.webmanifest',
+      iconCandidates: [{ kind: 'manifest', url: 'https://product.example/valid.png' }],
+    });
+  });
+
   it('returns empty metadata for malformed manifests', () => {
     expect(parseWebManifest('{nope', 'https://product.example/app.webmanifest')).toEqual({
       themeColor: null,

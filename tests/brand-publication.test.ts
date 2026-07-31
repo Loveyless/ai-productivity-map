@@ -46,6 +46,20 @@ describe('brand publication commit protocol', () => {
     await releaseAgain();
   });
 
+  it('reclaims an old lock only when its recorded process is no longer alive', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'ai-map-publication-'));
+    temporaryDirectories.push(directory);
+    const lockPath = join(directory, '.brand-sync.lock');
+    await writeFile(lockPath, `${JSON.stringify({ pid: 2147483647, startedAt: '2000-01-01T00:00:00.000Z' })}\n`);
+
+    const release = await acquireSingleWriterLock(lockPath, {
+      isProcessAlive: async () => false,
+    });
+    const current = JSON.parse(await readFile(lockPath, 'utf8'));
+    expect(current.pid).toBe(process.pid);
+    await release();
+  });
+
   it('publishes immutable files without replacing different existing bytes', async () => {
     const directory = await mkdtemp(join(tmpdir(), 'ai-map-publication-'));
     temporaryDirectories.push(directory);

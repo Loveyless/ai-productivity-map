@@ -219,7 +219,7 @@ async function inspectLink(tool) {
     }
     return { level: 'fail', tool, detail: `HTTP ${status}` };
   } catch (error) {
-    const code = error?.cause?.code;
+    const code = error?.code ?? error?.cause?.code;
     if (code === 'ENOTFOUND' || code === 'ECONNREFUSED') {
       return { level: 'fail', tool, detail: code };
     }

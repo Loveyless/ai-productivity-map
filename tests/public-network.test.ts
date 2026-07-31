@@ -42,6 +42,14 @@ describe('brand sync public-network boundary', () => {
     ])).resolves.toMatchObject({ protocol: 'https:', hostname: 'cdn.product.example' });
   });
 
+  it('preserves hard DNS error codes through the public resolver boundary', async () => {
+    const dnsError = Object.assign(new Error('not found'), { code: 'ENOTFOUND' });
+    await expect(requestPublicHttps('https://missing.example/', {
+      readBody: false,
+      resolver: async () => { throw dnsError; },
+    })).rejects.toMatchObject({ code: 'ENOTFOUND', cause: dnsError });
+  });
+
   it('pins the actual socket lookup to prevalidated addresses', async () => {
     const pinnedLookup = createPinnedLookup([
       { address: '93.184.216.34', family: 4 },
